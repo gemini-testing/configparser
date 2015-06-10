@@ -1,0 +1,8 @@
+.gitignore
+.travis.yml
+.jscsrc
+.npmignore
+test/
+src/
+coverage/
+CONTRIBUTING.md
