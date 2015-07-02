@@ -1,5 +1,5 @@
 {
-  "name": "@gemini-testing/configparser",
+  "name": "gemini-configparser",
   "version": "0.1.0",
   "description": "Config parser module for gemini",
   "main": "lib/index.js",
