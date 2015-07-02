@@ -3,10 +3,10 @@ import _ from 'lodash';
 const isLazy = Symbol('isLazy');
 
 export function buildLazyObject(keys, getKeyGetter) {
-    let target = {
+    const target = {
         [isLazy]: true
     };
-    for (let key of keys) {
+    for (const key of keys) {
         defineLazy(target, key, getKeyGetter(key));
     }
     return target;

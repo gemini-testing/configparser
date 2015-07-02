@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {buildLazyObject, forceParsing} from './lazy';
 import {MissingOptionError, UnknownKeysError} from './errors';
-import locator from './locator';
+import initLocator from './locator';
 
 /**
  * Single option
@@ -11,7 +11,7 @@ export function option({
         parseCli = _.identity,
         parseEnv = _.identity,
         validate = _.noop,
-        map = _.identity
+        map: mapFunc = _.identity
     }) {
 
     return (locator, parsed) => {
@@ -27,12 +27,12 @@ export function option({
             value = _.isFunction(defaultValue)
                 ? defaultValue(config)
                 : defaultValue;
-        } else  {
+        } else {
             throw new MissingOptionError(locator.name);
         }
         validate(value, config);
 
-        return map(value, config);
+        return mapFunc(value, config);
     };
 }
 
@@ -43,7 +43,7 @@ export function option({
 export function section(properties) {
     const expectedKeys = _.keys(properties);
     return (locator, config) => {
-        let unknownKeys = _.difference(
+        const unknownKeys = _.difference(
             _.keys(locator.option),
             expectedKeys
         );
@@ -53,7 +53,7 @@ export function section(properties) {
             );
         }
 
-        let lazyResult = buildLazyObject(expectedKeys, (key) => {
+        const lazyResult = buildLazyObject(expectedKeys, (key) => {
             const parser = properties[key];
             return () => parser(locator.nested(key), config);
         });
@@ -69,7 +69,7 @@ export function section(properties) {
  * parsed by valueParser.
  */
 export function map(valueParser) {
-    return(locator, config) => {
+    return (locator, config) => {
         if (locator.option === undefined) {
             return {};
         }
@@ -85,9 +85,9 @@ export function map(valueParser) {
 
 export function root(rootParser) {
     return ({options, env, argv}) => {
-        const rootLocator = locator({options, env, argv});
-        let parsed = {};
-        rootParser(rootLocator, config);
+        const rootLocator = initLocator({options, env, argv});
+        const parsed = {};
+        rootParser(rootLocator, parsed);
         return forceParsing(parsed.root);
     };
 }

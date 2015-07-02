@@ -60,13 +60,20 @@ describe('map', () => {
                 return;
             }
             assert.neverCalledWith(valueParser, secondLocator, context);
-            /*jshint unused:false*/
-            let result = config.name.second;
+
+            /*eslint-disable no-unused-expressions*/
+            config.name.second;
+            /*eslint-enable no-unused-expressions*/
 
             assert.calledWith(valueParser, secondLocator, context);
         });
         const parser = map(valueParser);
         const config = {};
+        const nestedStub = sinon.stub();
+
+        nestedStub
+            .withArgs('first').returns(firstLocator)
+            .withArgs('second').returns(secondLocator);
 
         parser({
             name: '.name',
@@ -74,9 +81,7 @@ describe('map', () => {
                 first: 1,
                 second: 2
             },
-            nested: sinon.stub()
-                .withArgs('first').returns(firstLocator)
-                .withArgs('second').returns(secondLocator)
+            nested: nestedStub
         }, config);
     });
 });

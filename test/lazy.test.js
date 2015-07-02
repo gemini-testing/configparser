@@ -21,10 +21,12 @@ describe('build lazy object', () => {
     });
 
     it('should call getter when property accessed', () => {
-        /*jshint unused: false*/
         const getter = sinon.spy().named('getter');
         const result = buildLazyObject(['key'], () => getter);
-        const value = result.key;
+
+        /*eslint-disable no-unused-expressions*/
+        result.key;
+        /*eslint-enable no-unused-expressions*/
 
         assert.calledOnce(getter);
     });
@@ -32,8 +34,11 @@ describe('build lazy object', () => {
     it('should not call getter when property accessed second time', () => {
         const getter = sinon.spy().named('getter');
         const result = buildLazyObject(['key'], () => getter);
-        let value = result.key;
-        value = result.key;
+
+        /*eslint-disable no-unused-expressions*/
+        result.key;
+        result.key;
+        /*eslint-enable no-unused-expressions*/
 
         assert.calledOnce(getter);
     });
@@ -45,7 +50,7 @@ describe('build lazy object', () => {
         assert.equal(result.key, 'value');
     });
 
-    it('should call getter when called forceParsing', ()=> {
+    it('should call getter when called forceParsing', () => {
         const getter = sinon.stub().named('getter');
         const result = buildLazyObject(['key'], () => getter);
 
@@ -53,7 +58,7 @@ describe('build lazy object', () => {
         assert.calledOnce(getter);
     });
 
-    it('should return correct object after forceParsing', ()=> {
+    it('should return correct object after forceParsing', () => {
         const getter = sinon.stub().named('getter').returns('value');
         const lazy = buildLazyObject(['key'], () => getter);
 

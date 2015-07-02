@@ -1,13 +1,16 @@
 {
   "name": "@gemini/configparser",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Config parser module for gemini",
   "main": "lib/index.js",
   "author": "Sergey Tatarintsev <sevinf@yandex-team.ru> (https://github.com/SevInf)",
   "license": "MIT",
   "devDependencies": {
     "babel": "^5.5.5",
+    "babel-eslint": "^3.1.20",
     "chai": "^3.0.0",
+    "eslint": "^0.24.0",
+    "eslint-plugin-arrow-function": "^0.1.0",
     "jscs": "^1.13.1",
     "mocha": "^2.2.5",
     "sinon": "^1.14.1"
@@ -20,6 +23,7 @@
     "build": "babel --optional runtime src -d lib",
     "watch": "npm run build -- --watch",
     "prepublish": "npm run build",
+    "lint": "eslint .",
     "test": "mocha"
   }
 }

@@ -3,21 +3,21 @@ import _ from 'lodash';
 const ENV_PREFIX = 'gemini_';
 const CLI_PREFIX = '--';
 
-export default function locator({options, env, argv}) {
-    function getNested(options, {namePrefix, envPrefix, cliPrefix}) {
+export default function initLocator({options, env, argv}) {
+    function getNested(option, {namePrefix, envPrefix, cliPrefix}) {
         return (subKey) => {
             const envName = envPrefix + _.snakeCase(subKey);
             const cliFlag = cliPrefix + _.kebabCase(subKey);
 
             const argIndex = argv.indexOf(cliFlag);
-            const option = _.get(options, subKey);
+            const subOption = _.get(option, subKey);
             const newName = `${namePrefix}.${subKey}`;
             return {
                 name: newName,
-                option: option,
+                option: subOption,
                 envVar: env[envName],
-                cliOption: argIndex > -1? argv[argIndex + 1] : undefined,
-                nested: getNested(option, {
+                cliOption: argIndex > -1 ? argv[argIndex + 1] : undefined,
+                nested: getNested(subOption, {
                     namePrefix: newName,
                     envPrefix: `${envName}_`,
                     cliPrefix: `${cliFlag}-`

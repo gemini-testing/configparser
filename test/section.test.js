@@ -7,7 +7,7 @@ function stubLocator(locatorKeys) {
     return Object.assign({
         name: 'key',
         nested: sinon.stub()
-    }, locatorKeys)
+    }, locatorKeys);
 }
 
 describe('section', () => {

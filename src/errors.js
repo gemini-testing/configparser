@@ -1,6 +1,6 @@
 export class MissingOptionError extends Error {
     constructor(optionName) {
-        let message = `${optionName} is required`;
+        const message = `${optionName} is required`;
         super(message);
         this.name = 'MissingOptionError';
         this.message = message;
@@ -12,7 +12,7 @@ export class MissingOptionError extends Error {
 
 export class UnknownKeysError extends Error {
     constructor(keys) {
-        let message = `Unknown options: ${keys.join(', ')}`;
+        const message = `Unknown options: ${keys.join(', ')}`;
         super(message);
         this.name = 'UnknownKeysError';
         this.message = message;

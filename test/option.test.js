@@ -126,7 +126,7 @@ describe('option', () => {
             const callback = sinon.stub().named(name);
             const parseEnv = sinon.stub().returns('parsed');
             const parser = option({
-                parseEnv: parseEnv,
+                parseEnv,
                 [name]: callback
             });
 
@@ -139,7 +139,7 @@ describe('option', () => {
             const callback = sinon.stub().named(name);
             const parseCli = sinon.stub().returns('parsed');
             const parser = option({
-                parseCli: parseCli,
+                parseCli,
                 [name]: callback
             });
 
