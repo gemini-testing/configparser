@@ -1,6 +1,6 @@
 {
   "name": "gemini-configparser",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Config parser module for gemini",
   "main": "lib/index.js",
   "author": "Sergey Tatarintsev <sevinf@yandex-team.ru> (https://github.com/SevInf)",
