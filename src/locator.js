@@ -4,12 +4,22 @@ const ENV_PREFIX = 'gemini_';
 const CLI_PREFIX = '--';
 
 export default function initLocator({options, env, argv}) {
+    argv = argv.reduce(function(argv, arg) {
+        if (!_.includes(arg, '=')) {
+            return argv.concat(arg);
+        }
+        const parts = arg.split('=');
+        const option = parts[0];
+        const value = parts.slice(1).join('=');
+        return argv.concat(option, value);
+    }, []);
+
     function getNested(option, {namePrefix, envPrefix, cliPrefix}) {
         return (subKey) => {
             const envName = envPrefix + _.snakeCase(subKey);
             const cliFlag = cliPrefix + _.kebabCase(subKey);
 
-            const argIndex = argv.indexOf(cliFlag);
+            const argIndex = argv.lastIndexOf(cliFlag);
             const subOption = _.get(option, subKey);
             const newName = `${namePrefix}.${subKey}`;
             return {
