@@ -22,30 +22,47 @@ export default function initLocator({options, env, argv}) {
             const argIndex = argv.lastIndexOf(cliFlag);
             const subOption = _.get(option, subKey);
             const newName = `${namePrefix}.${subKey}`;
-            return {
-                name: newName,
-                option: subOption,
-                envVar: env[envName],
-                cliOption: argIndex > -1 ? argv[argIndex + 1] : undefined,
-                nested: getNested(subOption, {
+
+            return mkLocator(
+                {
+                    name: newName,
+                    option: subOption,
+                    envVar: env[envName],
+                    cliOption: argIndex > -1 ? argv[argIndex + 1] : undefined
+                },
+                {
                     namePrefix: newName,
                     envPrefix: `${envName}_`,
                     cliPrefix: `${cliFlag}-`
-                })
-            };
+                }
+            );
         };
     }
 
-    return {
-        name: 'root',
-        option: options,
-        envVar: undefined,
-        cliOption: undefined,
-        nested: getNested(options, {
+    function mkLocator(base, prefixes) {
+        return _.extend(base, {
+            nested: getNested(base.option, prefixes),
+            resetOption: function(newOptions) {
+                return _.extend({}, base, {
+                    option: newOptions,
+                    nested: getNested(newOptions, prefixes)
+                });
+            }
+        });
+    }
+
+    return mkLocator(
+        {
+            name: 'root',
+            option: options,
+            envVar: undefined,
+            cliOption: undefined
+        },
+        {
             namePrefix: '',
             envPrefix: ENV_PREFIX,
             cliPrefix: CLI_PREFIX
-        })
-    };
+        }
+    );
 }
 

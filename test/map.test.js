@@ -2,6 +2,7 @@ import {map} from '../src/core';
 import {forceParsing} from '../src/lazy';
 import {assert} from 'chai';
 import sinon from 'sinon';
+import _ from 'lodash';
 
 describe('map', () => {
     it('should return an object', () => {
@@ -36,6 +37,55 @@ describe('map', () => {
 
         assert.calledWith(valueParser, key1Locator, config);
         assert.calledWith(valueParser, key2Locator, config);
+    });
+
+    it('should reset locator with default value if no option passed', () => {
+        const defaultValue = {someKey: {}};
+        const parser = map(sinon.stub(), defaultValue);
+        const locator = {
+            resetOption: sinon.stub()
+        };
+        locator.resetOption.returns(
+            _.extend({}, locator, {
+                option: {}
+            })
+        );
+
+        parser(locator, {});
+
+        assert.calledWith(locator.resetOption, defaultValue);
+    });
+
+    it('should call value parser wit default value if no option passed', () => {
+        const valueParser = sinon.stub();
+        const defaultValue = {someKey: 'someVal'};
+        const parser = map(valueParser, defaultValue);
+        const locator = {
+            resetOption: sinon.stub()
+        };
+        const newLocator = _.extend({}, locator, {
+            option: defaultValue,
+            nested: sinon.stub()
+        });
+        newLocator.nested.withArgs('someKey').returns(defaultValue.someKey);
+        locator.resetOption.returns(newLocator);
+
+        forceParsing(parser(locator, {}));
+
+        assert.calledWith(valueParser, 'someVal');
+    });
+
+    it('should not reset locator with default value if option passed', () => {
+        const defaultValue = {someKey: {}};
+        const parser = map(sinon.stub(), defaultValue);
+        const locator = {
+            option: {},
+            resetOption: sinon.stub()
+        };
+
+        parser(locator, {});
+
+        assert.notCalled(locator.resetOption);
     });
 
     it('should return the object parsed with value parser', () => {

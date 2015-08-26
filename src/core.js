@@ -68,11 +68,15 @@ export function section(properties) {
  * Object with user-specified keys and values,
  * parsed by valueParser.
  */
-export function map(valueParser) {
+export function map(valueParser, defaultValue) {
     return (locator, config) => {
         if (locator.option === undefined) {
-            return {};
+            if (!defaultValue) {
+                return {};
+            }
+            locator = locator.resetOption(defaultValue);
         }
+
         const optionsToParse = Object.keys(locator.option);
         const lazyResult = buildLazyObject(optionsToParse, (key) => {
             return () => valueParser(locator.nested(key), config);

@@ -151,4 +151,27 @@ describe('locator', () => {
         assert.propertyVal(childPointer, 'envVar', 'env value');
         assert.propertyVal(childPointer, 'cliOption', 'cli value');
     });
+
+    it('should reset option', () => {
+        const pointer = locator({
+            env: {
+                'gemini_first_second': 'env value'
+            },
+            argv: [
+                '--first-second', 'cli value'
+            ]
+        });
+
+        const newPointer = pointer.resetOption({
+            first: {
+                second: 'value'
+            }
+        });
+
+        const childPointer = newPointer.nested('first').nested('second');
+
+        assert.propertyVal(childPointer, 'option', 'value');
+        assert.propertyVal(childPointer, 'envVar', 'env value');
+        assert.propertyVal(childPointer, 'cliOption', 'cli value');
+    });
 });
