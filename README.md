@@ -32,10 +32,10 @@ There are 4 types of values:
     - `validate(value, config)` - a function used to validate the option value
     - `map(value, config)` - a function used to transform the option value
 * `section({sectionName1: valueParser1, sectionName2: valueParser2, ...})` - a section of a
-  values with specified key names. Each option will parsed with appropriate parser function. 
+  values with specified key names. Each option will parsed with appropriate parser function.
   Any unknown value passed by user will be treated as an error.
-* `map(valueParser)` - a map with any number of user-specifed keys. Each value is parsed by 
-  `valueParser`.
+* `map(valueParser, defaultValue)` - a map with any number of user-specified keys. Each value is parsed by
+  `valueParser`. If set, `defaultValue` will be used in case of no user-specified data provided.
 * `root(parser)` - creates a root config parsers from specifed parser function. Returns function
   with signature `f({options, env, argv})`.
 
