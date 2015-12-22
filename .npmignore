@@ -2,6 +2,7 @@
 .travis.yml
 .jscsrc
 .npmignore
+.sublime-project*
 test/
 src/
 coverage/
