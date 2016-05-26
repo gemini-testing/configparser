@@ -41,6 +41,19 @@ describe('locator', () => {
         assert.propertyVal(childPointer, 'name', '.key');
     });
 
+    it('should return empty parent for root children', () => {
+        const pointer = locatorWithOptions({someKey: 'someVal'});
+        const childPointer = pointer.nested('key');
+        assert.propertyVal(childPointer, 'parent', '');
+    });
+
+    it('should return parent name for not root children', () => {
+        const pointer = locatorWithOptions({someKey: 'someVal'});
+        const childPointer = pointer.nested('child');
+        const subChildPointer = childPointer.nested('subChild');
+        assert.propertyVal(subChildPointer, 'parent', '.child');
+    });
+
     it('should return env var value after nested call', () => {
         const pointer = locatorWithEnv({
             'gemini_option': 'env value'
