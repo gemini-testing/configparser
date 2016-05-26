@@ -26,6 +26,7 @@ export default function initLocator({options, env, argv}) {
             return mkLocator(
                 {
                     name: newName,
+                    parent: namePrefix,
                     option: subOption,
                     envVar: env[envName],
                     cliOption: argIndex > -1 ? argv[argIndex + 1] : undefined
@@ -54,6 +55,7 @@ export default function initLocator({options, env, argv}) {
     return mkLocator(
         {
             name: 'root',
+            parent: '',
             option: options,
             envVar: undefined,
             cliOption: undefined

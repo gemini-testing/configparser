@@ -16,6 +16,8 @@ export function option({
 
     return (locator, parsed) => {
         const config = parsed.root;
+        const currNode = locator.parent ? _.get(config, locator.parent) : config;
+
         let value;
         if (locator.cliOption !== undefined) {
             value = parseCli(locator.cliOption);
@@ -25,14 +27,14 @@ export function option({
             value = locator.option;
         } else if (defaultValue !== undefined) {
             value = _.isFunction(defaultValue)
-                ? defaultValue(config)
+                ? defaultValue(config, currNode)
                 : defaultValue;
         } else {
             throw new MissingOptionError(locator.name);
         }
-        validate(value, config);
+        validate(value, config, currNode);
 
-        return mapFunc(value, config);
+        return mapFunc(value, config, currNode);
     };
 }
 
