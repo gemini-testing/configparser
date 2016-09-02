@@ -1,9 +1,8 @@
 import _ from 'lodash';
 
-const ENV_PREFIX = 'gemini_';
 const CLI_PREFIX = '--';
 
-export default function initLocator({options, env, argv}) {
+export default function initLocator({options, env, argv, envPrefix = 'gemini_'}) {
     argv = argv.reduce(function(argv, arg) {
         if (!_.includes(arg, '=')) {
             return argv.concat(arg);
@@ -62,7 +61,7 @@ export default function initLocator({options, env, argv}) {
         },
         {
             namePrefix: '',
-            envPrefix: ENV_PREFIX,
+            envPrefix,
             cliPrefix: CLI_PREFIX
         }
     );
