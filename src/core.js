@@ -89,9 +89,9 @@ export function map(valueParser, defaultValue) {
     };
 }
 
-export function root(rootParser) {
+export function root(rootParser, {envPrefix}) {
     return ({options, env, argv}) => {
-        const rootLocator = initLocator({options, env, argv});
+        const rootLocator = initLocator({options, env, argv, envPrefix});
         const parsed = {};
         rootParser(rootLocator, parsed);
         return forceParsing(parsed.root);
