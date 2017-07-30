@@ -132,7 +132,7 @@ describe('option', () => {
                 }
             };
 
-            parser({parent: '.topLevel'}, config);
+            parser({parent: 'topLevel'}, config);
 
             assert.calledWith(defaultValStub, config.root, {subLevel: 'subLevelVal'});
         });
@@ -180,7 +180,7 @@ describe('option', () => {
                 }
             };
 
-            parser({option: 'value', parent: '.topLevel'}, config);
+            parser({option: 'value', parent: 'topLevel'}, config);
 
             assert.calledWith(callback, 'value', config.root, {subLevel: 'subLevelVal'});
         });

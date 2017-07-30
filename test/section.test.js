@@ -76,7 +76,7 @@ describe('section', () => {
         });
 
         const result = parser(stubLocator({
-            name: '.name',
+            name: 'name',
             option: {
                 property1: 1,
                 property2: 2
