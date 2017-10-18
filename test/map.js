@@ -1,8 +1,6 @@
-import {map} from '../src/core';
-import {forceParsing} from '../src/lazy';
-import {assert} from 'chai';
-import sinon from 'sinon';
-import _ from 'lodash';
+const {map} = require('../lib/core');
+const {forceParsing} = require('../lib/lazy');
+const _ = require('lodash');
 
 describe('map', () => {
     it('should return an object', () => {
@@ -22,8 +20,9 @@ describe('map', () => {
         const config = {};
         const nestedStub = sinon.stub();
         nestedStub
-                .withArgs('key1').returns(key1Locator)
-                .withArgs('key2').returns(key2Locator)
+            .withArgs('key1').returns(key1Locator)
+            .withArgs('key2').returns(key2Locator);
+
         const locator = {
             option: {
                 key1: '',

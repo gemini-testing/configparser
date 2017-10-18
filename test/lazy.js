@@ -1,6 +1,4 @@
-import {buildLazyObject, forceParsing} from '../src/lazy';
-import {assert} from 'chai';
-import sinon from 'sinon';
+const {buildLazyObject, forceParsing} = require('../lib/lazy');
 
 describe('build lazy object', () => {
     it('should build an object with given keys', () => {

@@ -1,7 +1,5 @@
-import {option} from '../src/core';
-import {MissingOptionError} from '../src/errors';
-import {assert} from 'chai';
-import sinon from 'sinon';
+const {option} = require('../lib/core');
+const {MissingOptionError} = require('../lib/errors');
 
 describe('option', () => {
     const LAZY_CONFIG = {
