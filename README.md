@@ -36,8 +36,7 @@ There are 4 types of values:
   Any unknown value passed by user will be treated as an error.
 * `map(valueParser, defaultValue)` - a map with any number of user-specified keys. Each value is parsed by
   `valueParser`. If set, `defaultValue` will be used in case of no user-specified data provided.
-* `root(parser)` - creates a root config parsers from specifed parser function. Returns function
-  with signature `f({options, env, argv})`.
+* `root(parser, {envPrefix, cliPrefix})` - creates a root config parsers from specifed parser function. Returns function with signature `f({options, env, argv})`.
 
 
 
