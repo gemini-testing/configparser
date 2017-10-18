@@ -55,7 +55,7 @@ describe('locator', () => {
 
     it('should return env var value after nested call', () => {
         const pointer = locatorWithEnv({
-            'gemini_option': 'env value'
+            'option': 'env value'
         });
         const childPointer = pointer.nested('option');
         assert.propertyVal(childPointer, 'envVar', 'env value');
@@ -63,7 +63,7 @@ describe('locator', () => {
 
     it('should read env value from snake_cased env var', () => {
         const pointer = locatorWithEnv({
-            'gemini_some_option': 'env value'
+            'some_option': 'env value'
         });
         const childPointer = pointer.nested('someOption');
         assert.propertyVal(childPointer, 'envVar', 'env value');
@@ -71,12 +71,26 @@ describe('locator', () => {
 
     it('should return undefined env if there is no such variable', () => {
         const pointer = locatorWithEnv({
-            'gemini_some_other_option': 'some value'
+            'some_other_option': 'some value'
         });
 
         const childPointer = pointer.nested('name');
 
         assert.propertyVal(childPointer, 'envVar', undefined);
+    });
+
+    it('should read env value from env var with custom prefix', () => {
+        const pointer = locator({
+            options: {},
+            argv: [],
+            env: {
+                'foo_some_option': 'env value'
+            },
+            envPrefix: 'foo_'
+        });
+        const childPointer = pointer.nested('someOption');
+
+        assert.propertyVal(childPointer, 'envVar', 'env value');
     });
 
     it('should return cli option after the nest call', () => {
@@ -149,7 +163,7 @@ describe('locator', () => {
                 }
             },
             env: {
-                'gemini_first_second': 'env value'
+                'first_second': 'env value'
             },
             argv: [
                 '--first-second',
@@ -167,7 +181,7 @@ describe('locator', () => {
     it('should reset option', () => {
         const pointer = locator({
             env: {
-                'gemini_first_second': 'env value'
+                'first_second': 'env value'
             },
             argv: [
                 '--first-second', 'cli value'
