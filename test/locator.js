@@ -1,5 +1,4 @@
-import {assert} from 'chai';
-import locator from '../src/locator';
+const locator = require('../lib/locator');
 
 function locatorWithOptions(options) {
     return locator({options, env: {}, argv: []});

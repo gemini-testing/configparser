@@ -1,7 +1,5 @@
-import {section} from '../src/core';
-import {assert} from 'chai';
-import {forceParsing} from '../src/lazy';
-import sinon from 'sinon';
+const {section} = require('../lib/core');
+const {forceParsing} = require('../lib/lazy');
 
 function stubLocator(locatorKeys) {
     return Object.assign({
