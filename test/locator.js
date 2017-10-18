@@ -4,12 +4,12 @@ function locatorWithOptions(options) {
     return locator({options, env: {}, argv: []});
 }
 
-function locatorWithEnv(env) {
-    return locator({options: {}, env, argv: []});
+function locatorWithEnv(env, {envPrefix} = {}) {
+    return locator({options: {}, env, argv: [], envPrefix});
 }
 
-function locatorWithArgv(argv) {
-    return locator({options: {}, env: {}, argv});
+function locatorWithArgv(argv, {cliPrefix} = {}) {
+    return locator({options: {}, env: {}, argv, cliPrefix});
 }
 
 describe('locator', () => {
@@ -80,14 +80,10 @@ describe('locator', () => {
     });
 
     it('should read env value from env var with custom prefix', () => {
-        const pointer = locator({
-            options: {},
-            argv: [],
-            env: {
-                'foo_some_option': 'env value'
-            },
-            envPrefix: 'foo_'
-        });
+        const pointer = locatorWithEnv(
+            {'foo_some_option': 'env value'},
+            {envPrefix: 'foo_'}
+        );
         const childPointer = pointer.nested('someOption');
 
         assert.propertyVal(childPointer, 'envVar', 'env value');
@@ -153,6 +149,16 @@ describe('locator', () => {
         const childPointer = pointer.nested('someOption');
 
         assert.propertyVal(childPointer, 'cliOption', undefined);
+    });
+
+    it('should use option with custom prefix', () => {
+        const pointer = locatorWithArgv(
+            ['--foo-option', 'cli value'],
+            {cliPrefix: '--foo-'}
+        );
+        const childPointer = pointer.nested('option');
+
+        assert.propertyVal(childPointer, 'cliOption', 'cli value');
     });
 
     it('should support nesting for more then 1 level', () => {
