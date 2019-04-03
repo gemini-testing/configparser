@@ -93,6 +93,17 @@ describe('option', () => {
         assert.equal(value, 'value');
     });
 
+    it('should extend value by default value using passed function', () => {
+        const parser = option({
+            defaultValue: ['def'],
+            extend: (value, defaultValue) => [].concat(value, defaultValue)
+        });
+
+        const value = parser({option: ['value']}, LAZY_CONFIG);
+
+        assert.deepEqual(value, ['value', 'def']);
+    });
+
     describe('if no option set', () => {
         it('should return defaultValue', () => {
             const parser = option({
