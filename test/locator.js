@@ -37,7 +37,7 @@ describe('locator', () => {
     it('should return nested name after nest call', () => {
         const pointer = locatorWithOptions({});
         const childPointer = pointer.nested('key');
-        assert.propertyVal(childPointer, 'name', '.key');
+        assert.propertyVal(childPointer, 'name', 'key');
     });
 
     it('should return empty parent for root children', () => {
@@ -50,7 +50,7 @@ describe('locator', () => {
         const pointer = locatorWithOptions({someKey: 'someVal'});
         const childPointer = pointer.nested('child');
         const subChildPointer = childPointer.nested('subChild');
-        assert.propertyVal(subChildPointer, 'parent', '.child');
+        assert.propertyVal(subChildPointer, 'parent', 'child');
     });
 
     it('should return env var value after nested call', () => {
