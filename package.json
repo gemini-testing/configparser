@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Config parser module for gemini",
   "main": "lib/index.js",
+  "types": "./typings/index.d.ts",
   "author": "Sergey Tatarintsev <sevinf@yandex-team.ru> (https://github.com/SevInf)",
   "license": "MIT",
   "devDependencies": {
