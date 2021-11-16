@@ -1,24 +1,33 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-module.exports = function({options, env, argv, envPrefix = '', cliPrefix = '--'}) {
-    argv = argv.reduce(function(argv, arg) {
+import type { DeepPartial } from '../types/utils';
+import type { LocatorArg, Locator, Node, Prefixes } from '../types/locator';
+
+function parseArgv(argv: Array<string>): Array<string> {
+    return argv.reduce(function(argv, arg) {
         if (!_.includes(arg, '=')) {
             return argv.concat(arg);
         }
+
         const parts = arg.split('=');
         const option = parts[0];
         const value = parts.slice(1).join('=');
-        return argv.concat(option, value);
-    }, []);
 
-    function getNested(option, {namePrefix, envPrefix, cliPrefix}) {
+        return argv.concat(option, value);
+    }, [] as Array<string>);
+}
+
+export default function<T>({options, env, argv, envPrefix = '', cliPrefix = '--'}: LocatorArg<T>): Locator<T> {
+    argv = parseArgv(argv);
+
+    function getNested<T extends {}>(option: DeepPartial<T> | undefined, {namePrefix, envPrefix, cliPrefix}: Prefixes): (key: keyof T) => Locator<T[keyof T]> {
         return (subKey) => {
-            const envName = envPrefix + _.snakeCase(subKey);
-            const cliFlag = cliPrefix + _.kebabCase(subKey);
+            const envName = envPrefix + _.snakeCase(subKey.toString());
+            const cliFlag = cliPrefix + _.kebabCase(subKey.toString());
 
             const argIndex = argv.lastIndexOf(cliFlag);
             const subOption = _.get(option, subKey);
-            const newName = namePrefix ? `${namePrefix}.${subKey}` : subKey;
+            const newName = namePrefix ? `${namePrefix}.${subKey}` : subKey.toString();
 
             return mkLocator(
                 {
@@ -37,14 +46,11 @@ module.exports = function({options, env, argv, envPrefix = '', cliPrefix = '--'}
         };
     }
 
-    function mkLocator(base, prefixes) {
+    function mkLocator<T>(base: Node<T>, prefixes: Prefixes): Locator<T> {
         return _.extend(base, {
             nested: getNested(base.option, prefixes),
-            resetOption: function(newOptions) {
-                return _.extend({}, base, {
-                    option: newOptions,
-                    nested: getNested(newOptions, prefixes)
-                });
+            resetOption: function<T>(newOptions: T): Locator<T> {
+                return mkLocator({ ...base, option: newOptions }, prefixes);
             }
         });
     }
@@ -58,10 +64,9 @@ module.exports = function({options, env, argv, envPrefix = '', cliPrefix = '--'}
             cliOption: undefined
         },
         {
-            namePrefix: '',
+            namePrefix: 'root',
             envPrefix,
             cliPrefix
         }
     );
 };
-

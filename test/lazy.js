@@ -1,4 +1,4 @@
-const {buildLazyObject, forceParsing} = require('../lib/lazy');
+const {buildLazyObject, forceParsing} = require('../build/lazy');
 
 describe('build lazy object', () => {
     it('should build an object with given keys', () => {

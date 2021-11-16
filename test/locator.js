@@ -1,4 +1,4 @@
-const locator = require('../lib/locator');
+const locator = require('../build/locator').default;
 
 function locatorWithOptions(options) {
     return locator({options, env: {}, argv: []});
@@ -37,20 +37,20 @@ describe('locator', () => {
     it('should return nested name after nest call', () => {
         const pointer = locatorWithOptions({});
         const childPointer = pointer.nested('key');
-        assert.propertyVal(childPointer, 'name', 'key');
+        assert.propertyVal(childPointer, 'name', 'root.key');
     });
 
-    it('should return empty parent for root children', () => {
+    it('should return parent for root children', () => {
         const pointer = locatorWithOptions({someKey: 'someVal'});
         const childPointer = pointer.nested('key');
-        assert.propertyVal(childPointer, 'parent', '');
+        assert.propertyVal(childPointer, 'parent', 'root');
     });
 
     it('should return parent name for not root children', () => {
         const pointer = locatorWithOptions({someKey: 'someVal'});
         const childPointer = pointer.nested('child');
         const subChildPointer = childPointer.nested('subChild');
-        assert.propertyVal(subChildPointer, 'parent', 'child');
+        assert.propertyVal(subChildPointer, 'parent', 'root.child');
     });
 
     it('should return env var value after nested call', () => {
