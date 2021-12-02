@@ -1,5 +1,7 @@
-class MissingOptionError extends Error {
-    constructor(optionName) {
+export class MissingOptionError extends Error {
+    public optionName: string;
+
+    constructor(optionName: string) {
         const message = `${optionName} is required`;
         super(message);
         this.name = 'MissingOptionError';
@@ -10,8 +12,10 @@ class MissingOptionError extends Error {
     }
 }
 
-class UnknownKeysError extends Error {
-    constructor(keys) {
+export class UnknownKeysError extends Error {
+    public keys: Array<string>;
+
+    constructor(keys: Array<string>) {
         const message = `Unknown options: ${keys.join(', ')}`;
         super(message);
         this.name = 'UnknownKeysError';
@@ -21,5 +25,3 @@ class UnknownKeysError extends Error {
         Error.captureStackTrace(this, UnknownKeysError);
     }
 }
-
-module.exports = {MissingOptionError, UnknownKeysError};
