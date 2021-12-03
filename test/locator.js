@@ -99,7 +99,7 @@ describe('locator', () => {
         assert.propertyVal(childPointer, 'cliOption', 'cli value');
     });
 
-    it('should return cli option set with --option=value syntax', () => {
+    it('should return cli option set with --option="cli value"', () => {
         const pointer = locatorWithArgv([
             '--option=cli value'
         ]);
@@ -108,9 +108,19 @@ describe('locator', () => {
         assert.propertyVal(childPointer, 'cliOption', 'cli value');
     });
 
-    it('should allow to have = sign inside option set with --option=value syntax', () => {
+    it('should allow to have = sign inside option set with --option="cli=value"', () => {
         const pointer = locatorWithArgv([
             '--option=cli=value'
+        ]);
+        const childPointer = pointer.nested('option');
+
+        assert.propertyVal(childPointer, 'cliOption', 'cli=value');
+    });
+
+    it('should allow to have = sign inside option set with --option "cli=value"', () => {
+        const pointer = locatorWithArgv([
+            '--option',
+            'cli=value'
         ]);
         const childPointer = pointer.nested('option');
 
