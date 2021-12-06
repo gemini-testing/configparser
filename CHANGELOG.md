@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.1](https://github.com/gemini-testing/configparser/compare/v1.1.0...v1.1.1) (2021-12-06)
+
+### Bug Fixes
+
+* **locator:**  fix argv parsing ([0e7c2f91](https://github.com/gemini-testing/configparser/commit/0e7c2f91be54f56793f43375d78dd763ebe6e818))
+
+### Tests
+
+* **locator:**  add new unit test ([e06ce4de](https://github.com/gemini-testing/configparser/commit/e06ce4de56ddc0f31e1fdced7ef9a4ee0865d270))
+
+
 ## [1.1.0](https://github.com/gemini-testing/configparser/compare/v1.0.1...v1.1.0) (2021-08-11)
 
 
