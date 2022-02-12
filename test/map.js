@@ -1,5 +1,5 @@
-const {map} = require('../lib/core');
-const {forceParsing} = require('../lib/lazy');
+const {map} = require('../build/core');
+const {forceParsing} = require('../build/lazy');
 const _ = require('lodash');
 
 describe('map', () => {

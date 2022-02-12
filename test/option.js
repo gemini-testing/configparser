@@ -1,5 +1,5 @@
-const {option} = require('../lib/core');
-const {MissingOptionError} = require('../lib/errors');
+const {option} = require('../build/core');
+const {MissingOptionError} = require('../build/errors');
 
 describe('option', () => {
     const LAZY_CONFIG = {

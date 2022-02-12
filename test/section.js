@@ -1,5 +1,5 @@
-const {section} = require('../lib/core');
-const {forceParsing} = require('../lib/lazy');
+const {section} = require('../build/core');
+const {forceParsing} = require('../build/lazy');
 
 function stubLocator(locatorKeys) {
     return Object.assign({

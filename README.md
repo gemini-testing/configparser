@@ -8,6 +8,7 @@ Config is described with a combination of a functions:
 var parser = root(section({
     system: section({
         parallelLimit: option({
+            defaultValue: 0,
             parseEnv: Number,
             parseCli: Number,
             validate: function() {...}
