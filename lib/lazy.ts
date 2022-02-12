@@ -1,38 +1,52 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-const isLazy = Symbol('isLazy');
+import type { LazyObject } from './types/lazy';
 
-function buildLazyObject(keys, getKeyGetter) {
+export const isLazy = Symbol('isLazy');
+
+export function buildLazyObject<T>(keys: Array<keyof T>, getKeyGetter: (key: keyof T) => () => (T[keyof T] | LazyObject<T[keyof T]>)): LazyObject<T> {
     const target = {
         [isLazy]: true
-    };
+    } as LazyObject<T>;
+
     for (const key of keys) {
         defineLazy(target, key, getKeyGetter(key));
     }
+
     return target;
 }
 
-function forceParsing(lazyObject) {
+export function forceParsing<T>(lazyObject: LazyObject<T>): T {
     return _.cloneDeep(lazyObject);
 }
 
-function defineLazy(object, key, getter) {
+function defineLazy<T>(object: LazyObject<T>, key: keyof T, getter: () => T[keyof T] | LazyObject<T[keyof T]>): void {
     let defined = false;
-    let value;
+    let value: T[keyof T];
 
     Object.defineProperty(object, key, {
-        get() {
+        get(): T[keyof T] {
             if (!defined) {
                 defined = true;
-                value = getter();
-                if (_.isObject(value) && value[isLazy]) {
-                    value = forceParsing(value);
+                const val = getter();
+
+                if (isLazyObject(val)) {
+                    value = forceParsing(val);
+                } else {
+                    value = val;
                 }
             }
+
             return value;
         },
         enumerable: true
     });
 }
 
-module.exports = {forceParsing, buildLazyObject};
+function isLazyObject<T>(value: T): value is LazyObject<T> {
+    return _.isObject(value) && hasOwnProperty(value, isLazy) && value[isLazy] === true;
+}
+
+function hasOwnProperty<T extends {}>(obj: T, prop: PropertyKey): obj is T & Record<typeof prop, unknown> {
+    return obj.hasOwnProperty(prop);
+}

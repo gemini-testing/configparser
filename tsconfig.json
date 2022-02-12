@@ -1,0 +1,14 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "include": ["lib/**/*"],
+  "exclude": ["build", "test", "types"],
+  "compilerOptions": {
+    "outDir": "build",
+    "types": ["node"],
+    "allowJs": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "declaration": true
+  }
+}

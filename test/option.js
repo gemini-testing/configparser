@@ -1,5 +1,5 @@
-const {option} = require('../lib/core');
-const {MissingOptionError} = require('../lib/errors');
+const {option} = require('../build/core');
+const {MissingOptionError} = require('../build/errors');
 
 describe('option', () => {
     const LAZY_CONFIG = {
@@ -130,7 +130,7 @@ describe('option', () => {
                 }
             };
 
-            parser({parent: 'topLevel'}, config);
+            parser({parent: 'root.topLevel'}, config);
 
             assert.calledWith(defaultValStub, config.root, {subLevel: 'subLevelVal'});
         });
@@ -178,7 +178,7 @@ describe('option', () => {
                 }
             };
 
-            parser({option: 'value', parent: 'topLevel'}, config);
+            parser({option: 'value', parent: 'root.topLevel'}, config);
 
             assert.calledWith(callback, 'value', config.root, {subLevel: 'subLevelVal'});
         });
