@@ -11,15 +11,19 @@ declare module "gemini-configparser" {
       cliPrefix: string;
   };
 
+  type MetaInfo = {
+      isSetByUser: boolean;
+  };
+
   type OptionParserConfig<T> = {
       defaultValue: T | ((config: UnsanitizedRootConfig, currNode: UnsanitizedConfigNode) => T);
       parseCli?(input: string): T;
       parseEnv?(input: string): T;
-      validate?(value: T, config: UnsanitizedRootConfig, currNode: UnsanitizedConfigNode): void;
+      validate?(value: T, config: UnsanitizedRootConfig, currNode: UnsanitizedConfigNode, meta: MetaInfo): void;
   };
 
   type MappedOptionParserConfig<S, T> = OptionParserConfig<S> & {
-      map(value: S, config: UnsanitizedRootConfig, currNode: UnsanitizedConfigNode): T;
+      map(value: S, config: UnsanitizedRootConfig, currNode: UnsanitizedConfigNode, meta: MetaInfo): T;
   };
 
   type SectionProperties<T> = { [name in keyof T]: Parser<T[name]> };
