@@ -208,10 +208,69 @@ describe('option', () => {
 
             assert.calledWith(callback, 'parsed');
         });
+
+        it(`should call ${name} callback with meta info if option is specified`, () => {
+            const callback = sinon.stub().named(name);
+            const parser = option({
+                [name]: callback
+            });
+
+            parser({option: 'value'}, LAZY_CONFIG);
+
+            assert.calledWith(callback, 'value', LAZY_CONFIG.root, LAZY_CONFIG.root, {isSetByUser: true});
+        });
+
+        it(`should call ${name} callback with meta info if option is specified by env`, () => {
+            const callback = sinon.stub().named(name);
+            const parser = option({
+                [name]: callback
+            });
+
+            parser({envVar: 'value'}, LAZY_CONFIG);
+
+            assert.calledWith(callback, 'value', LAZY_CONFIG.root, LAZY_CONFIG.root, {isSetByUser: true});
+        });
+
+        it(`should call ${name} callback with meta info if option is specified by cli`, () => {
+            const callback = sinon.stub().named(name);
+            const parser = option({
+                [name]: callback
+            });
+
+            parser({cliOption: 'value'}, LAZY_CONFIG);
+
+            assert.calledWith(callback, 'value', LAZY_CONFIG.root, LAZY_CONFIG.root, {isSetByUser: true});
+        });
+
+        it(`should call ${name} callback with meta info that the option is not specified`, () => {
+            const callback = sinon.stub().named(name);
+            const parser = option({
+                defaultValue: 'value',
+                [name]: callback
+            });
+
+            parser({}, LAZY_CONFIG);
+
+            assert.calledWith(callback, 'value', LAZY_CONFIG.root, LAZY_CONFIG.root, {isSetByUser: false});
+        });
     }
 
     testAfterParseCallback('validate');
     testAfterParseCallback('map');
+
+    it('should pass separate meta info object to map and validate', () => {
+        const validateCallback = sinon.stub();
+        const mapCallback = sinon.stub();
+        const parser = option({
+            defaultValue: 'value',
+            validate: validateCallback,
+            map: mapCallback
+        });
+
+        parser({}, LAZY_CONFIG);
+
+        assert.notEqual(validateCallback.firstCall.args[3], mapCallback.firstCall.args[3]);
+    });
 
     it('should return value returned by map callback', () => {
         const map = sinon.stub().returns('mapped');
