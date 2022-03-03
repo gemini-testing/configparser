@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0]((https://github.com/gemini-testing/configparser/compare/v1.1.1...v1.2.0)) (2022-03-03)
+
+### Chores
+
+*  fix README ([5585d417](https://github.com/gemini-testing/configparser/commit/5585d417b0c9736939eaaa7f2db272667d378779))
+
+### New Features
+
+* **option:**  add new meta information to both validate and map callbacks ([df7c567d](https://github.com/gemini-testing/configparser/commit/df7c567d291b367930908e7b57992cb7940c849c))
+
+### Tests
+
+* **core:**  add new unit tests ([8d1bc090](https://github.com/gemini-testing/configparser/commit/8d1bc09052d47b798015a4d6ccc195434bae0817))
+
 ## [1.1.1](https://github.com/gemini-testing/configparser/compare/v1.1.0...v1.1.1) (2021-12-06)
 
 ### Bug Fixes
@@ -12,9 +26,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **locator:**  add new unit test ([e06ce4de](https://github.com/gemini-testing/configparser/commit/e06ce4de56ddc0f31e1fdced7ef9a4ee0865d270))
 
-
 ## [1.1.0](https://github.com/gemini-testing/configparser/compare/v1.0.1...v1.1.0) (2021-08-11)
-
 
 ### Features
 
