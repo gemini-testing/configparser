@@ -5,7 +5,8 @@ interface MetaInfo {
     isSetByUser: boolean;
 }
 
-export interface OptionParserConfig<Value, MappedValue, Result> {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface OptionParserConfig<Value, MappedValue, Result = any> {
     defaultValue?: Value | ((config: Result, currNode: any) => Value);
     parseCli?: (input?: string) => Value | undefined;
     parseEnv?: (input?: string) => Value | undefined;
@@ -13,6 +14,7 @@ export interface OptionParserConfig<Value, MappedValue, Result> {
     map?(value: Value, config: Result, currNode: any, meta: MetaInfo): MappedValue;
     isDeprecated?: boolean;
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export interface OptionParser<Value, Result> {
     (locator: Locator<Value>, config: Rooted<Result>): Value;

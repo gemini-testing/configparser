@@ -1,3 +1,4 @@
 module.exports = {
-    extends: 'gemini-testing/tests'
+    extends: ['gemini-testing', 'gemini-testing/tests'],
+    root: true
 };
