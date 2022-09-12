@@ -1,24 +1,36 @@
-const _ = require('lodash');
-const {buildLazyObject, forceParsing} = require('./lazy');
-const {MissingOptionError, UnknownKeysError} = require('./errors');
-const initLocator = require('./locator');
+import _ from 'lodash';
+
+import {MissingOptionError, UnknownKeysError} from './errors';
+import {buildLazyObject, forceParsing} from './lazy';
+import initLocator from './locator';
+
+import type {Rooted, Parser} from './types/common';
+import type {LazyObject} from './types/lazy';
+import type {Locator} from './types/locator';
+import type {MapParser} from './types/map';
+import type {OptionParser, OptionParserConfig} from './types/option';
+import type {RootParser, RootPrefixes, ConfigParser} from './types/root';
+import type {SectionParser, SectionProperties} from './types/section';
+import type {Map} from './types/utils';
 
 /**
  * Single option
  */
-function option({
+export function option<Value, Result, MappedValue = Value>({
     defaultValue,
     parseCli = _.identity,
     parseEnv = _.identity,
     validate = _.noop,
     map: mapFunc = _.identity,
     isDeprecated = false
-}) {
+}: OptionParserConfig<Value, MappedValue, Result> = {}): OptionParser<MappedValue, Result> {
+    const validateFunc: typeof validate = validate;
+
     return (locator, parsed) => {
         const config = parsed.root;
         const currNode = locator.parent ? _.get(config, locator.parent) : config;
 
-        let value, isSetByUser = true;
+        let value: unknown, isSetByUser = true;
         if (locator.cliOption !== undefined) {
             value = parseCli(locator.cliOption);
         } else if (locator.envVar !== undefined) {
@@ -38,7 +50,7 @@ function option({
             console.warn(`Using "${locator.name}" option is deprecated`);
         }
 
-        validate(value, config, currNode, {isSetByUser});
+        validateFunc(value, config, currNode, {isSetByUser});
 
         return mapFunc(value, config, currNode, {isSetByUser});
     };
@@ -48,13 +60,15 @@ function option({
  * Object with fixed properties.
  * Any unknown property will be reported as error.
  */
-function section(properties) {
-    const expectedKeys = _.keys(properties);
+export function section<Config, Result>(properties: SectionProperties<Config, Result>): SectionParser<Config, Result> {
+    const expectedKeys = _.keys(properties) as Array<keyof Config>;
+
     return (locator, config) => {
         const unknownKeys = _.difference(
             _.keys(locator.option),
-            expectedKeys
+            expectedKeys as Array<string>
         );
+
         if (unknownKeys.length > 0) {
             throw new UnknownKeysError(
                 unknownKeys.map((key) => `${locator.name}.${key}`)
@@ -63,6 +77,7 @@ function section(properties) {
 
         const lazyResult = buildLazyObject(expectedKeys, (key) => {
             const parser = properties[key];
+
             return () => parser(locator.nested(key), config);
         });
 
@@ -76,32 +91,34 @@ function section(properties) {
  * Object with user-specified keys and values,
  * parsed by valueParser.
  */
-function map(valueParser, defaultValue) {
+export function map<SubConfig, Result>(
+    valueParser: Parser<SubConfig, Result>,
+    defaultValue: Map<SubConfig>
+): MapParser<Map<SubConfig>, Result> {
     return (locator, config) => {
         if (locator.option === undefined) {
             if (!defaultValue) {
-                return {};
+                return {} as LazyObject<Map<SubConfig>>;
             }
             locator = locator.resetOption(defaultValue);
         }
 
-        const optionsToParse = Object.keys(locator.option);
-        const lazyResult = buildLazyObject(optionsToParse, (key) => {
+        const optionsToParse = Object.keys(locator.option as Map<SubConfig>);
+        const lazyResult = buildLazyObject<Map<SubConfig>>(optionsToParse, (key) => {
             return () => valueParser(locator.nested(key), config);
         });
+
         _.set(config, locator.name, lazyResult);
 
         return lazyResult;
     };
 }
 
-function root(rootParser, {envPrefix, cliPrefix}) {
+export function root<Config, Result = Config>(rootParser: RootParser<Config, Result>, {envPrefix, cliPrefix}: RootPrefixes = {}): ConfigParser<Config> {
     return ({options, env, argv}) => {
         const rootLocator = initLocator({options, env, argv, envPrefix, cliPrefix});
-        const parsed = {};
-        rootParser(rootLocator, parsed);
-        return forceParsing(parsed.root);
+        const parsed = rootParser(rootLocator as Locator<Config>, {} as Rooted<Result>);
+
+        return forceParsing(parsed);
     };
 }
-
-module.exports = {option, section, map, root};

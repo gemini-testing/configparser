@@ -1,4 +1,4 @@
-const locator = require('../lib/locator');
+const locator = require('../build/locator');
 
 function locatorWithOptions(options) {
     return locator({options, env: {}, argv: []});
