@@ -150,6 +150,11 @@ describe('option', () => {
             const parser = option({});
             assert.throws(() => parser({}, LAZY_CONFIG), MissingOptionError);
         });
+
+        it('should not throw if option is deprecated', () => {
+            const parser = option({isDeprecated: true});
+            assert.doesNotThrow(() => parser({}, LAZY_CONFIG), MissingOptionError);
+        });
     });
 
     function testAfterParseCallback(name) {
