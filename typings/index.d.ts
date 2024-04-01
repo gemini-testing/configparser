@@ -9,7 +9,8 @@ declare module "gemini-configparser" {
   export type Parser<T> = (locator: Locator, config: PartialConfig) => T;
 
   type RootPrefixes = {
-      envPrefix: string;
+      // If defined as an array and multiple prefixes match, first defined in the array will be used
+      envPrefix: string | string[];
       cliPrefix: string;
   };
 
