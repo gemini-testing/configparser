@@ -239,4 +239,17 @@ describe('locator', () => {
 
         assert.propertyVal(childPointer, 'envVar', 'some env value');
     });
+
+    it('should support multiple prefixes with deep nesting', () => {
+        const pointer = locatorWithEnv(
+            {
+                'bar_some_deep_nested_option': 'some value'
+            },
+            {envPrefix: ['foo_', 'bar_']}
+        );
+
+        const childPointer = pointer.nested('some').nested('deep').nested('nested').nested('option');
+
+        assert.propertyVal(childPointer, 'envVar', 'some value');
+    });
 });
