@@ -216,4 +216,27 @@ describe('locator', () => {
         assert.propertyVal(childPointer, 'envVar', 'env value');
         assert.propertyVal(childPointer, 'cliOption', 'cli value');
     });
+
+    it('should support multiple envPrefix values', () => {
+        const pointer = locatorWithEnv(
+            {'bar_some_option': 'env value'},
+            {envPrefix: ['foo_', 'bar_']}
+        );
+        const childPointer = pointer.nested('someOption');
+
+        assert.propertyVal(childPointer, 'envVar', 'env value');
+    });
+
+    it('should use first existing envPrefix value', () => {
+        const pointer = locatorWithEnv(
+            {
+                'bar_some_option': 'another env value',
+                'foo_some_option': 'some env value'
+            },
+            {envPrefix: ['foo_', 'bar_']}
+        );
+        const childPointer = pointer.nested('someOption');
+
+        assert.propertyVal(childPointer, 'envVar', 'some env value');
+    });
 });
