@@ -1,6 +1,6 @@
 # @gemini/configparser
 
-Parser for [`gemini`](https://github.com/gemini-testing/gemini) configuration files.
+Parser for [`testplane`](https://github.com/gemini-testing/testplane) configuration files.
 
 Config is described with a combination of a functions:
 
