@@ -1,7 +1,18 @@
+const sinon = require('sinon');
 const {option} = require('../lib/core');
 const {MissingOptionError} = require('../lib/errors');
 
 describe('option', () => {
+    let consoleWarnStub;
+
+    beforeEach(() => {
+        consoleWarnStub = sinon.stub(console, 'warn');
+    });
+
+    afterEach(() => {
+        consoleWarnStub.restore();
+    });
+
     const LAZY_CONFIG = {
         root: {defaultKey: 'defaultValue'}
     };
@@ -155,6 +166,18 @@ describe('option', () => {
             const parser = option({isDeprecated: true});
             assert.doesNotThrow(() => parser({}, LAZY_CONFIG), MissingOptionError);
         });
+
+        it('should not log warning on deprecated option without any value', () => {
+            option({isDeprecated: true})({}, LAZY_CONFIG);
+
+            assert.notCalled(consoleWarnStub);
+        });
+    });
+
+    it('should log warning on deprecated option if option is set', () => {
+        option({isDeprecated: true})({envVar: 'foo'}, LAZY_CONFIG);
+
+        assert.calledWith(consoleWarnStub, sinon.match('option is deprecated'));
     });
 
     function testAfterParseCallback(name) {
